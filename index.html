@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket IO</title>
+</head>
+<body>
+    Practicing sockets
+    <button id="emitBtn">emit event</button>
+    <ul id="messages"></ul>
+    <script src="/socket.io/socket.io.js"></script>
+    <input type="text" name="msg" id="msg">
+    <button id="send">Send</button>
+    <script>
+      const socket = io();
+      const createMessages = (message) => {
+        const ul = document.querySelector('#messages')
+        const li = document.createElement('li')
+        li.innerText = message
+        ul.appendChild(li)
+      }
+      const btn = document.querySelector('#emitBtn')
+      btn.addEventListener('click', (e) => {
+        socket.emit('ping')
+        return false
+      })
+
+      const inputEl = document.querySelector('#msg')
+      const send = document.querySelector('#send')
+      send.addEventListener('click', (e) => {
+        socket.emit('sendMessage', inputEl.value)
+        inputEl.value = ''
+        return false
+      })
+
+      socket.on('hello', (message)=> createMessages(message))
+      socket.on('pong', (message)=> createMessages(message))
+      socket.on('serverMessage', (message)=> createMessages(message))
+      
+
+    </script>
+</body>
+</html>
